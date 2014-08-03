@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ "$2." == "." ] ; then
+	date=`date +%x\ %X`
+else
+	date=$2
+fi
 cat <<EOF
 <!DOCTYPE html>
 <html>
@@ -13,7 +18,7 @@ cat <<EOF
 		<div id="nodecount">$(($1))
 </div>
 		<p>#ffpb Clients online</p>
-		<p id="timestamp">`date +%x\ %X`</p>
+		<p id="timestamp">$date</p>
 	</div>
 </body>
 EOF

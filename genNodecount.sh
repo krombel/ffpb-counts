@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ "$2." == "." ] ; then
+	date=`date +%x\ %X`
+else
+	date=$2
+fi
 cat <<EOF
 <!DOCTYPE html>
 <html>

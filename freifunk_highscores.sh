@@ -23,6 +23,7 @@ while true; do
 		echo "nodes.json is not downloadable. Try again in 1 second"; sleep 1; done
 
 	jsonDate=`date -r "nodes.json" +%s`
+	dateOutput=`date '+%d.%m.%y, %H:%M:%S' -d @$jsonDate`
 	tmpCounts=`python calcCounts.py`
 	aktFreifunkNodes=`echo $tmpCounts | awk '{print $2}'`
 	aktFreifunkClients=`echo $tmpCounts | awk '{print $5}'`
@@ -32,11 +33,11 @@ while true; do
 	echo $aktFreifunkClients > Clientcount/aktClientcount.txt
 
 	# print generated informations
-	echo "`date '+%x, %X' -d @$jsonDate`: Nodecount:   akt: $aktFreifunkNodes; max: $maxFreifunkNodes"
-	echo "`date '+%x, %X' -d @$jsonDate`: Clientcount: akt: $aktFreifunkClients; max: $maxFreifunkClients"
+	echo "$dateOutput: Nodecount:   akt: $aktFreifunkNodes; max: $maxFreifunkNodes"
+	echo "$dateOutput: Clientcount: akt: $aktFreifunkClients; max: $maxFreifunkClients"
 
-	./genNodecount.sh $aktFreifunkNodes > Nodecount/aktNodecount.html
-	./genClientcount.sh $aktFreifunkClients > Clientcount/aktClientcount.html
+	./genNodecount.sh $aktFreifunkNodes $dateOutput > Nodecount/aktNodecount.html
+	./genClientcount.sh $aktFreifunkClients $dateOutput > Clientcount/aktClientcount.html
 
 	if [ $aktFreifunkNodes -gt $maxFreifunkNodes ] ; then
 		echo "new Nodecount-Highscore: $aktFreifunkNodes"
@@ -66,7 +67,7 @@ while true; do
 	# if you don't want to load the complete Website for this informations, you can use this one.
 	echo "Nodecount: akt: $aktFreifunkNodes; max: $maxFreifunkNodes" > tmpCounts.txt
         echo "Clientcount: akt: $aktFreifunkClients; max: $maxFreifunkClients" >> tmpCounts.txt
-	echo "Last update: `date '+%d.%m.%Y, %X' -d @$jsonDate`" >> tmpCounts.txt
+	echo "Last update: $dateOutput" >> tmpCounts.txt
 
 	## Backup nodes.json
 	#[ -d nodes.json.old ] || mkdir nodes.json.old
