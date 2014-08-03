@@ -23,7 +23,7 @@ while true; do
 		echo "nodes.json is not downloadable. Try again in 1 second"; sleep 1; done
 
 	jsonDate=`date -r "nodes.json" +%s`
-	dateOutput=`date '+%d.%m.%y, %H:%M:%S' -d @$jsonDate`
+	dateOutput=`date '+%d.%m.%y %H:%M:%S' -d @$jsonDate`
 	tmpCounts=`python calcCounts.py`
 	aktFreifunkNodes=`echo $tmpCounts | awk '{print $2}'`
 	aktFreifunkClients=`echo $tmpCounts | awk '{print $5}'`
