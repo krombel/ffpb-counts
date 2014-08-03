@@ -76,5 +76,10 @@ while true; do
 	# sleep till 3 seconds after the next generation of the file
 	updateIntervall=60 # seconds
 	aktDate=`date +%s`
-	sleep $(($jsonDate-$aktDate+$updateIntervall+3));
+	
+	# For the case, the nodes.json is available but the timestamp is more than 60 seconds behind:
+	# This would cause a loop, because sleep gets an negative value. For a lower load use two 
+	# separate sleep commands: One dynamic and one with a static value
+	sleep 10
+	sleep $(($jsonDate-$aktDate+$updateIntervall-10+3));
 done
