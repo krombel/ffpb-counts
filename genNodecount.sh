@@ -2,7 +2,7 @@
 if [ "$2." == "." ] ; then
 	date=`date +%x\ %X`
 else
-	date=$2
+	date="$2"
 fi
 cat <<EOF
 <!DOCTYPE html>
@@ -19,7 +19,7 @@ cat <<EOF
 </div>
 		<p>#ffpb Knoten online</p>
 		<!--p>Bei 100 gibt's Nussecken f&uuml;r's Team!</p-->
-		<p id="timestamp">`date +%x\ %X`</p>
+		<p id="timestamp">$date</p>
 	</div>
 </body>
 EOF
