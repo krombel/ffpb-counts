@@ -1,0 +1,19 @@
+#!/bin/bash
+cat <<EOF
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>FFPB ClientCount</title>
+		<link rel="stylesheet" type="text/css" href="http://nodecount.paderborn.freifunk.net/nodecount.css">
+		<link href='http://fonts.googleapis.com/css?family=Special+Elite|Nova+Square' rel='stylesheet' type='text/css'>
+		<meta http-equiv="refresh" content="60">
+	</head>
+<body>
+	<div id="container">
+		<div id="nodecount">$(($1))
+</div>
+		<p>#ffpb Clients online</p>
+		<p id="timestamp">`date +%x\ %X`</p>
+	</div>
+</body>
+EOF
