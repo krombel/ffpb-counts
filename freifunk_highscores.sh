@@ -36,8 +36,8 @@ while true; do
 	echo "$dateOutput: Nodecount:   akt: $aktFreifunkNodes; max: $maxFreifunkNodes"
 	echo "$dateOutput: Clientcount: akt: $aktFreifunkClients; max: $maxFreifunkClients"
 
-	./genNodecount.sh $aktFreifunkNodes $dateOutput > Nodecount/aktNodecount.html
-	./genClientcount.sh $aktFreifunkClients $dateOutput > Clientcount/aktClientcount.html
+	./genNodecount.sh $aktFreifunkNodes "$dateOutput" > Nodecount/aktNodecount.html
+	./genClientcount.sh $aktFreifunkClients "$dateOutput" > Clientcount/aktClientcount.html
 
 	if [ $aktFreifunkNodes -gt $maxFreifunkNodes ] ; then
 		echo "new Nodecount-Highscore: $aktFreifunkNodes"
