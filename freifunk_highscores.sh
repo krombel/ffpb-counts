@@ -45,6 +45,7 @@ while true; do
 		ln -s -f Nodecount.$aktFreifunkNodes.html Nodecount/maxNodecount.html
 		maxFreifunkNodes=$((aktFreifunkNodes))
 		echo $maxFreifunkNodes > Nodecount/maxNodecount.txt
+		echo $jsonDate > Nodecount/maxNodecount.date.txt
 	fi
 
 	if [ $aktFreifunkClients -gt $maxFreifunkClients ] ; then
@@ -53,6 +54,7 @@ while true; do
 		ln -s -f Clientcount.$aktFreifunkClients.html Clientcount/maxClientcount.html
 		maxFreifunkClients=$((aktFreifunkClients))
 		echo $maxFreifunkClients > Clientcount/maxClientcount.txt
+		echo $jsonDate > Clientcount/maxClientcount.date.txt
 	fi
 
 	# this value is checked by other Skripts
