@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # for other Skripts
 aktChanged=0
@@ -6,6 +6,7 @@ aktChanged=0
 [ -d Nodecount ] || mkdir Nodecount
 [ -d Clientcount ] || mkdir Clientcount
 
+# init local variables with saved values
 aktFreifunkNodes=0
 maxFreifunkNodes=0
 if [ -f Nodecount/maxNodecount.txt ] ; then
@@ -27,58 +28,62 @@ while true; do
 	tmpCounts=`python calcCounts.py`
 	aktFreifunkNodes=`echo $tmpCounts | awk '{print $2}'`
 	aktFreifunkClients=`echo $tmpCounts | awk '{print $5}'`
-	
-	# save aktCounts (for the use in other Skripts)
-	echo $aktFreifunkNodes > Nodecount/aktNodecount.txt
-	echo $aktFreifunkClients > Clientcount/aktClientcount.txt
 
-	# print generated informations
-	echo "$dateOutput: Nodecount:   akt: $aktFreifunkNodes; max: $maxFreifunkNodes"
-	echo "$dateOutput: Clientcount: akt: $aktFreifunkClients; max: $maxFreifunkClients"
+	if [ $aktFreifunkNodes -gt 0 ] && [ $aktFreifunkClients -gt 0 ] ; then
+	# we have values that could be right
 
-	./genNodecount.sh $aktFreifunkNodes "$dateOutput" > Nodecount/aktNodecount.html
-	./genClientcount.sh $aktFreifunkClients "$dateOutput" > Clientcount/aktClientcount.html
+		# save aktCounts (for the use in other Skripts)
+		echo $aktFreifunkNodes > Nodecount/aktNodecount.txt
+		echo $aktFreifunkClients > Clientcount/aktClientcount.txt
 
-	if [ $aktFreifunkNodes -gt $maxFreifunkNodes ] ; then
-		echo "new Nodecount-Highscore: $aktFreifunkNodes"
-		cp Nodecount/aktNodecount.html Nodecount/Nodecount.$aktFreifunkNodes.html
-		ln -s -f Nodecount.$aktFreifunkNodes.html Nodecount/maxNodecount.html
-		maxFreifunkNodes=$((aktFreifunkNodes))
-		echo $maxFreifunkNodes > Nodecount/maxNodecount.txt
-		echo $jsonDate > Nodecount/maxNodecount.date.txt
-	fi
+		# print generated informations
+		echo "$dateOutput: Nodecount:   akt: $aktFreifunkNodes; max: $maxFreifunkNodes"
+		echo "$dateOutput: Clientcount: akt: $aktFreifunkClients; max: $maxFreifunkClients"
 
-	if [ $aktFreifunkClients -gt $maxFreifunkClients ] ; then
-		echo "new Client-Highscore: $aktFreifunkClients"
-		cp Clientcount/aktClientcount.html Clientcount/Clientcount.$aktFreifunkClients.html
-		ln -s -f Clientcount.$aktFreifunkClients.html Clientcount/maxClientcount.html
-		maxFreifunkClients=$((aktFreifunkClients))
-		echo $maxFreifunkClients > Clientcount/maxClientcount.txt
-		echo $jsonDate > Clientcount/maxClientcount.date.txt
-	fi
+		./genNodecount.sh $aktFreifunkNodes "$dateOutput" > Nodecount/aktNodecount.html
+		./genClientcount.sh $aktFreifunkClients "$dateOutput" > Clientcount/aktClientcount.html
 
-	# this value is checked by other Skripts
-	if [ $aktChanged -eq 0 ] ; then
-		echo 1 > changevalue.txt
-		aktChanged=1
-	else
-		echo 0 > changevalue.txt
-		aktChanged=0
-	fi
-	
-	# if you don't want to load the complete Website for this informations, you can use this one.
-	echo "Nodecount: akt: $aktFreifunkNodes; max: $maxFreifunkNodes" > tmpCounts.txt
-        echo "Clientcount: akt: $aktFreifunkClients; max: $maxFreifunkClients" >> tmpCounts.txt
-	echo "Last update: $dateOutput" >> tmpCounts.txt
+		if [ $aktFreifunkNodes -gt $maxFreifunkNodes ] ; then
+			echo "new Nodecount-Highscore: $aktFreifunkNodes"
+			cp Nodecount/aktNodecount.html Nodecount/Nodecount.$aktFreifunkNodes.html
+			ln -s -f Nodecount.$aktFreifunkNodes.html Nodecount/maxNodecount.html
+			maxFreifunkNodes=$((aktFreifunkNodes))
+			echo $maxFreifunkNodes > Nodecount/maxNodecount.txt
+			echo $jsonDate > Nodecount/maxNodecount.date.txt
+		fi
 
-	## Backup nodes.json
-	#[ -d nodes.json.old ] || mkdir nodes.json.old
-	#mv nodes.json "nodes.json.old/`date '+%Y%m%d%H%M%S'`.nodes.json"
+		if [ $aktFreifunkClients -gt $maxFreifunkClients ] ; then
+			echo "new Client-Highscore: $aktFreifunkClients"
+			cp Clientcount/aktClientcount.html Clientcount/Clientcount.$aktFreifunkClients.html
+			ln -s -f Clientcount.$aktFreifunkClients.html Clientcount/maxClientcount.html
+			maxFreifunkClients=$((aktFreifunkClients))
+			echo $maxFreifunkClients > Clientcount/maxClientcount.txt
+			echo $jsonDate > Clientcount/maxClientcount.date.txt
+		fi
+
+		# this value is checked by other Skripts
+		if [ $aktChanged -eq 0 ] ; then
+			echo 1 > changevalue.txt
+			aktChanged=1
+		else
+			echo 0 > changevalue.txt
+			aktChanged=0
+		fi
+
+		# if you don't want to load the complete Website for this informations, you can use this one.
+		echo "Nodecount: akt: $aktFreifunkNodes; max: $maxFreifunkNodes" > tmpCounts.txt
+	        echo "Clientcount: akt: $aktFreifunkClients; max: $maxFreifunkClients" >> tmpCounts.txt
+		echo "Last update: $dateOutput" >> tmpCounts.txt
+
+		## Backup nodes.json
+		#[ -d nodes.json.old ] || mkdir nodes.json.old
+		#mv nodes.json "nodes.json.old/`date '+%Y%m%d%H%M%S'`.nodes.json"
+	fi # acceptable values
 
 	# sleep till 3 seconds after the next generation of the file
 	updateIntervall=60 # seconds
 	aktDate=`date +%s`
-	
+
 	# For the case, the nodes.json is available but the timestamp is more than 60 seconds behind:
 	# This would cause a loop, because sleep gets an negative value. For a lower load use two 
 	# separate sleep commands: One dynamic and one with a static value
