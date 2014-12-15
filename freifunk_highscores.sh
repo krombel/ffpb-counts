@@ -31,14 +31,18 @@ while true; do
 
 	if [ $aktFreifunkNodes -gt 0 ] && [ $aktFreifunkClients -gt 0 ] ; then
 	# we have values that could be right
-
 		# save aktCounts (for the use in other Skripts)
 		echo $aktFreifunkNodes > Nodecount/aktNodecount.txt
+		echo $jsonDate > Nodecount/aktNodecount.date.txt
 		echo $aktFreifunkClients > Clientcount/aktClientcount.txt
+		echo $jsonDate > Clientcount/aktClientcount.date.txt
 
 		# print generated informations
 		echo "$dateOutput: Nodecount:   akt: $aktFreifunkNodes; max: $maxFreifunkNodes"
 		echo "$dateOutput: Clientcount: akt: $aktFreifunkClients; max: $maxFreifunkClients"
+
+		./genJSON.sh $aktFreifunkNodes "$jsonDate" > Nodecount/aktNodecount.json
+		./genJSON.sh $aktFreifunkClients "$jsonDate" > Clientcount/aktClientcount.json
 
 		./genNodecount.sh $aktFreifunkNodes "$dateOutput" > Nodecount/aktNodecount.html
 		./genClientcount.sh $aktFreifunkClients "$dateOutput" > Clientcount/aktClientcount.html
@@ -50,6 +54,7 @@ while true; do
 			maxFreifunkNodes=$((aktFreifunkNodes))
 			echo $maxFreifunkNodes > Nodecount/maxNodecount.txt
 			echo $jsonDate > Nodecount/maxNodecount.date.txt
+			./genJSON.sh $maxFreifunkNodes $jsonDate > Nodecount/maxNodecount.json
 		fi
 
 		if [ $aktFreifunkClients -gt $maxFreifunkClients ] ; then
@@ -59,6 +64,7 @@ while true; do
 			maxFreifunkClients=$((aktFreifunkClients))
 			echo $maxFreifunkClients > Clientcount/maxClientcount.txt
 			echo $jsonDate > Clientcount/maxClientcount.date.txt
+			./genJSON.sh $aktFreifunkClients "$jsonDate" > Clientcount/maxClientcount.json
 		fi
 
 		# this value is checked by other Skripts
@@ -78,6 +84,8 @@ while true; do
 		## Backup nodes.json
 		#[ -d nodes.json.old ] || mkdir nodes.json.old
 		#mv nodes.json "nodes.json.old/`date '+%Y%m%d%H%M%S'`.nodes.json"
+	else
+		echo "values are not acceptable"
 	fi # acceptable values
 
 	# sleep till 3 seconds after the next generation of the file
