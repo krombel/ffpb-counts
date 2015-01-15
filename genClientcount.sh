@@ -9,7 +9,7 @@ cat <<EOF
 <html>
 	<head>
 		<title>FFPB ClientCount</title>
-		<link rel="stylesheet" type="text/css" href="http://nodecount.paderborn.freifunk.net/nodecount.css">
+		<link rel="stylesheet" type="text/css" href="/nodecount.css">
 		<link href='http://fonts.googleapis.com/css?family=Special+Elite|Nova+Square' rel='stylesheet' type='text/css'>
 		<meta http-equiv="refresh" content="60">
 	</head>

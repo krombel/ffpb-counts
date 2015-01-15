@@ -1,0 +1,23 @@
+body {
+	background-image:url(ffpb-blass.png);
+	background-repeat:no-repeat;
+	background-position:100px 50%;
+
+	font-family: 'Special Elite', cursive;
+}
+
+div#container {
+	width: 400px;
+	margin: 100px auto;
+	text-align: center;
+}
+
+div#nodecount {
+	font-family: 'Nova Square', cursive;
+	font-weight: bold;
+	font-size: 64pt;
+}
+
+p#timestamp {
+	color: #999;
+}
