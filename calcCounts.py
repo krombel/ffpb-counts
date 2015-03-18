@@ -4,7 +4,7 @@ import json
 
 data = json.load(open('nodes.json','r'))
 
-nodes_count = 0
+nodes_count = 6
 clients_count = 0
 
 for node in data['nodes']:
